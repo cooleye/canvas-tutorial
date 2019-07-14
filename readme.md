@@ -714,3 +714,89 @@ if (canvas.getContext){
 ```
 
 ## 15. canvas绘制图表
+```
+ //获取渲染上下文对象
+    const canvas = document.getElementById('mycanvas');
+    // const ctx = canvas.getContext('2d');
+
+    let data = [
+        {id:0,mounth:1,value:45},
+        {id:1,mounth:2,value:80},
+        {id:2,mounth:3,value:75},
+        {id:3,mounth:4,value:150},
+        {id:4,mounth:5,value:220},
+        {id:5,mounth:6,value:166},
+    ]
+
+    if (canvas.getContext){
+        var ctx = canvas.getContext('2d');
+
+        ctx.save();
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(0,0,800,500);
+        //移动原点到左下角
+        ctx.translate(0,500);
+        //垂直镜像，笛卡尔坐标
+        ctx.scale(1,-1);
+
+        //绘制纵坐标
+        ctx.moveTo(105,100);
+        ctx.lineTo(105,450);
+        ctx.stroke();
+
+         //绘制横坐标线
+        for(let i = 0;i < 8;i++){
+            ctx.fillStyle = "#333";
+            ctx.lineWidth = 0.5;
+            ctx.beginPath();
+            ctx.moveTo(100,100+50*i);
+            ctx.lineTo(600,100+50*i);
+            if(i == 0){
+                ctx.lineWidth = 1;
+            }
+            ctx.stroke();
+        }
+        //绘制纵坐标
+        ctx.restore()
+        for(let i = 0;i< 8;i++){
+            ctx.fillText(350-50*i,50,50 + 50*i)
+        }
+
+        //绘制横坐标
+        ctx.beginPath();
+        for(let i = 0;i < data.length;i++){
+            let d = data[i];
+            ctx.fillText(d.mounth+"月", 100 + 100*i, 420);
+        }
+        ctx.save();
+
+        ctx.beginPath();
+        //垂直镜像，笛卡尔坐标
+        ctx.translate(0,500);
+        ctx.scale(1,-1);
+        //绘制数据点
+        for(let i = 0;i < data.length;i++){
+            let d = data[i];
+            ctx.beginPath();
+            ctx.arc(100*d.mounth,100+d.value,3,0,Math.PI*2);
+            ctx.fill()
+        }
+        ctx.save();
+       
+       //绘制折线
+        for(let i = 0;i < data.length;i++){
+            let d = data[i];
+            if(i == 0){
+                ctx.beginPath();
+                ctx.moveTo(100*d.mounth,100+d.value);
+            }else{
+                ctx.lineTo(100*d.mounth,100+d.value);
+                ctx.stroke();
+            }
+        }
+       
+    } else {
+        // 提示不支持canvas
+    }
+
+```
